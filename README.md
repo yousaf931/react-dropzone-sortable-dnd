@@ -1,6 +1,6 @@
 # DropZone Component
 
-DropZone is a flexible and customizable React component for file uploading with drag-and-drop functionality. It supports image compression, custom thumbnail rendering, and more. Perfect for building modern file upload experiences.
+DropZone is a flexible and customizable React component for file uploading with sortable drag-and-drop functionality. It supports image compression, custom thumbnail rendering. Perfect for building modern file upload experiences based on tailwindcss styling.
 
 ## Features
 
