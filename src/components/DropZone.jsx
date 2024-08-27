@@ -16,13 +16,16 @@ const DropZone = ({
   loader: LoaderComponent = Loader,
   className = '',
   acceptedFileTypes = { 'image/jpeg': ['.jpeg', '.jpg'], 'image/png': ['.png'] },
-  renderThumbnail, // Custom function to render thumbnails
+  renderThumbnail,
 }) => {
   const [files, setFiles] = useState(
     multiple ? (Array.isArray(images) ? images : []) : images ? [images] : []
   );
   const [rejectedFiles, setRejectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [draggedIndex, setDraggedIndex] = useState(null); // Track the index of the dragged item
+  const [placeholderIndex, setPlaceholderIndex] = useState(null); // Track where the placeholder should be
   const dragItem = useRef(null);
   const dragOverItem = useRef(null);
 
@@ -57,7 +60,7 @@ const DropZone = ({
               maxSizeMB: 1,
               maxWidthOrHeight: maxWidth,
               useWebWorker: true,
-              ...compressionOptions, // Allow additional options for compression
+              ...compressionOptions,
             };
             const compressedFile = await imageCompression(file, options);
             return {
@@ -110,10 +113,14 @@ const DropZone = ({
 
   const handleDragStart = (index) => {
     dragItem.current = index;
+    setDraggedIndex(index);
+    setDragging(true);
+    setPlaceholderIndex(index);
   };
 
   const handleDragEnter = (index) => {
     dragOverItem.current = index;
+    setPlaceholderIndex(index);
   };
 
   const handleDragEnd = () => {
@@ -125,6 +132,9 @@ const DropZone = ({
     dragItem.current = null;
     dragOverItem.current = null;
     setFiles(updatedFiles);
+    setDragging(false);
+    setDraggedIndex(null);
+    setPlaceholderIndex(null);
 
     if (onUpload) {
       setTimeout(() => onUpload(multiple ? updatedFiles : updatedFiles[0] || null), 0);
@@ -138,18 +148,32 @@ const DropZone = ({
       onDragStart={() => handleDragStart(index)}
       onDragEnter={() => handleDragEnter(index)}
       onDragEnd={handleDragEnd}
-      className={
+      className={`${
         index === 0
-          ? "col-span-2 row-span-2 border-slate-300 p-0.5 h-40 w-40 border rounded-lg cursor-pointer transition-transform duration-200 ease-in-out mr-3"
-          : "border border-slate-300 p-0.5 rounded-lg cursor-pointer h-20 w-20 mb-2 transition-transform duration-200 ease-in-out"
-      }
+          ? 'col-span-2 row-span-2 h-40 w-40 mr-3'
+          : 'h-20 w-20 mb-2'
+      } border-slate-300 p-0.5 border rounded-lg cursor-pointer transition-transform duration-200 ease-in-out`}
     >
-      <div className="relative group w-full h-full">
-        <img
-          src={file.preview}
-          className="object-cover w-full h-full rounded-md"
-          onLoad={() => URL.revokeObjectURL(file.preview)}
-        />
+      <div className={`relative group w-full h-full ${dragging && draggedIndex === index ? 'opacity-80' : ''}`}>
+        {dragging && draggedIndex === index ? (
+          <img
+            src={file.preview}
+            className="object-cover w-full h-full rounded-md"
+            onLoad={() => URL.revokeObjectURL(file.preview)}
+          />
+        ) : (
+          <>
+            <img
+              src={file.preview}
+              className="object-cover w-full h-full rounded-md"
+              onLoad={() => URL.revokeObjectURL(file.preview)}
+            />
+            {dragging && placeholderIndex === index && (
+              <div className="absolute inset-0 bg-slate-200 rounded-md"></div>
+            )}
+          </>
+        )}
+
         <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center opacity-0 bg-slate-950 group-hover:opacity-40 transition-opacity"></div>
         <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
@@ -165,15 +189,21 @@ const DropZone = ({
       </div>
     </div>
   );
-
+    
+  
+  
   const thumbs = files.map((file, index) =>
-    renderThumbnail ? renderThumbnail(file, index, handleDragStart, handleDragEnter, handleDragEnd, removeFile) : defaultRenderThumbnail(file, index)
+    renderThumbnail
+      ? renderThumbnail(file, index, handleDragStart, handleDragEnter, handleDragEnd, removeFile)
+      : defaultRenderThumbnail(file, index)
   );
 
   const rejectedThumbs = rejectedFiles.map(({ file, errors, id }) => (
     <div key={id} className="relative p-2 border rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-2">
-        <p className="text-sm text-red-600">{file.path} - {errors.map((e) => e.message).join(', ')}</p>
+        <p className="text-sm text-red-600">
+          {file.path} - {errors.map((e) => e.message).join(', ')}
+        </p>
         <button
           onClick={() => removeRejectedFile(id)}
           className="text-red-600 hover:text-red-800"
@@ -211,7 +241,7 @@ const DropZone = ({
           <LoaderComponent />
         </div>
       )}
-      <div className='flex items-center justify-center mt-4'>
+      <div className="flex items-center justify-center mt-4">
         <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 w-[80%]">
           {thumbs}
           {rejectedFiles.length > 0 && (
