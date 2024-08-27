@@ -77,7 +77,7 @@ const customRenderThumbnail = (file, index, handleDragStart, handleDragEnter, ha
       <button onClick={() => removeFile(file.id)}>Remove</button>
     </div>
 );
-
+```
 
 ## Acknowledgments
 
