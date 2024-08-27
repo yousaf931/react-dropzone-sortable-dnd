@@ -12,6 +12,21 @@ DropZone is a flexible and customizable React component for file uploading with 
 - **Customizable File Types**: Control which file types can be uploaded.
 - **Lightweight**: Minimal dependencies and easy to integrate.
 
+## Installation and Usage
+
+To install the package, use npm or yarn:
+
+```bash
+npm install react-dropzone-sortable-dnd
+# or
+yarn add react-dropzone-sortable-dnd
+```
+
+```javascript
+import DropZone from 'react-dropzone-sortable-dnd';
+
+```
+
 ## Props
 
 | Prop                | Type                 | Default                     | Description                                                                                          |
