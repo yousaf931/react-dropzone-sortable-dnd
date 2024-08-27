@@ -60,6 +60,9 @@ DropZone is a flexible and customizable React component for file uploading with 
 
 ## Custom Render Thumbnail Function
 
+You can pass a custom function to render the thumbnails in the DropZone component. Here's an example of a custom render thumbnail function:
+
+```javascript
 const customRenderThumbnail = (file, index, handleDragStart, handleDragEnter, handleDragEnd, removeFile) => (
     <div
       key={file.id}
@@ -73,7 +76,8 @@ const customRenderThumbnail = (file, index, handleDragStart, handleDragEnter, ha
       <img src={file.preview} alt={file.file.name} />
       <button onClick={() => removeFile(file.id)}>Remove</button>
     </div>
-  );
+);
+
 
 ## Acknowledgments
 
