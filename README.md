@@ -6,6 +6,7 @@ DropZone is a flexible and customizable React component for file uploading with 
 
 - **Drag-and-Drop**: Easily drag and drop files to upload.
 - **Image Compression**: Optionally compress images before uploading.
+- **Sortable Drag N Drop**: Implemented sortable drag-and-drop functionality without relying on external libraries.
 - **Custom Thumbnails**: Render custom thumbnails using a provided function.
 - **Multiple Files**: Support for uploading multiple files.
 - **Customizable File Types**: Control which file types can be uploaded.
