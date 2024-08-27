@@ -18,7 +18,9 @@ To install the package, use npm or yarn:
 
 ```bash
 npm install react-dropzone-sortable-dnd
+```
 # or
+```bash
 yarn add react-dropzone-sortable-dnd
 ```
 
