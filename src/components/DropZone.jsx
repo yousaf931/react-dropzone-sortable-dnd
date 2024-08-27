@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { useDropzone } from 'react-dropzone';
-import imageCompression from 'browser-image-compression';
-import Loader from './Loader';
-import { GripVertical, Upload } from 'lucide-react';
+import React, { useEffect, useState, useRef } from "react";
+import PropTypes from "prop-types";
+import { useDropzone } from "react-dropzone";
+import imageCompression from "browser-image-compression";
+import Loader from "./Loader";
+import { GripVertical, Upload } from "lucide-react";
 
 const DropZone = ({
   multiple = true,
@@ -14,8 +14,11 @@ const DropZone = ({
   compressImages = true,
   compressionOptions = {},
   loader: LoaderComponent = Loader,
-  className = '',
-  acceptedFileTypes = { 'image/jpeg': ['.jpeg', '.jpg'], 'image/png': ['.png'] },
+  className = "",
+  acceptedFileTypes = {
+    "image/jpeg": [".jpeg", ".jpg"],
+    "image/png": [".png"],
+  },
   renderThumbnail,
 }) => {
   const [files, setFiles] = useState(
@@ -34,17 +37,29 @@ const DropZone = ({
     setFiles(updatedFiles);
 
     if (onUpload) {
-      setTimeout(() => onUpload(multiple ? updatedFiles : updatedFiles.length > 0 ? updatedFiles[0] : null), 0);
+      setTimeout(
+        () =>
+          onUpload(
+            multiple
+              ? updatedFiles
+              : updatedFiles.length > 0
+              ? updatedFiles[0]
+              : null
+          ),
+        0
+      );
     }
   };
 
   const removeRejectedFile = (fileId) => {
-    const updatedRejectedFiles = rejectedFiles.filter((file) => file.id !== fileId);
+    const updatedRejectedFiles = rejectedFiles.filter(
+      (file) => file.id !== fileId
+    );
     setRejectedFiles(updatedRejectedFiles);
   };
 
   const stripFileExtension = (filename) => {
-    return filename.replace(/\.[^/.]+$/, '');
+    return filename.replace(/\.[^/.]+$/, "");
   };
 
   const onDrop = async (acceptedFiles) => {
@@ -69,7 +84,7 @@ const DropZone = ({
               id: `${fileNameWithoutExtension}-${Date.now()}-${index}`,
             };
           } catch (error) {
-            console.error('Error compressing file', error);
+            console.error("Error compressing file", error);
             return null;
           }
         } else {
@@ -89,7 +104,10 @@ const DropZone = ({
     setFiles(updatedFiles);
 
     if (onUpload) {
-      setTimeout(() => onUpload(multiple ? updatedFiles : updatedFiles[0] || null), 0);
+      setTimeout(
+        () => onUpload(multiple ? updatedFiles : updatedFiles[0] || null),
+        0
+      );
     }
 
     setLoading(false);
@@ -137,7 +155,10 @@ const DropZone = ({
     setPlaceholderIndex(null);
 
     if (onUpload) {
-      setTimeout(() => onUpload(multiple ? updatedFiles : updatedFiles[0] || null), 0);
+      setTimeout(
+        () => onUpload(multiple ? updatedFiles : updatedFiles[0] || null),
+        0
+      );
     }
   };
 
@@ -149,12 +170,14 @@ const DropZone = ({
       onDragEnter={() => handleDragEnter(index)}
       onDragEnd={handleDragEnd}
       className={`${
-        index === 0
-          ? 'col-span-2 row-span-2 h-40 w-40 mr-3'
-          : 'h-20 w-20 mb-2'
+        index === 0 ? "col-span-2 row-span-2 h-40 w-40 mr-3" : "h-20 w-20 mb-2"
       } border-slate-300 p-0.5 border rounded-lg cursor-pointer transition-transform duration-200 ease-in-out`}
     >
-      <div className={`relative group w-full h-full ${dragging && draggedIndex === index ? 'opacity-80' : ''}`}>
+      <div
+        className={`relative group w-full h-full ${
+          dragging && draggedIndex === index ? "opacity-80" : ""
+        }`}
+      >
         {dragging && draggedIndex === index ? (
           <img
             src={file.preview}
@@ -189,12 +212,17 @@ const DropZone = ({
       </div>
     </div>
   );
-    
-  
   
   const thumbs = files.map((file, index) =>
     renderThumbnail
-      ? renderThumbnail(file, index, handleDragStart, handleDragEnter, handleDragEnd, removeFile)
+      ? renderThumbnail(
+          file,
+          index,
+          handleDragStart,
+          handleDragEnter,
+          handleDragEnd,
+          removeFile
+        )
       : defaultRenderThumbnail(file, index)
   );
 
@@ -202,7 +230,7 @@ const DropZone = ({
     <div key={id} className="relative p-2 border rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-2">
         <p className="text-sm text-red-600">
-          {file.path} - {errors.map((e) => e.message).join(', ')}
+          {file.path} - {errors.map((e) => e.message).join(", ")}
         </p>
         <button
           onClick={() => removeRejectedFile(id)}
@@ -225,14 +253,14 @@ const DropZone = ({
       <div
         {...getRootProps({
           className:
-            'dropzone border-2 h-40 flex flex-col gap-4 items-center justify-center border-dashed border-slate-200 dark:border-slate-700 p-6 text-center cursor-pointer',
+            "dropzone border-2 h-40 flex flex-col gap-4 items-center justify-center border-dashed border-slate-200 dark:border-slate-700 p-6 text-center cursor-pointer",
         })}
       >
         <Upload className="h-8 w-8 text-slate-500 dark:text-slate-400" />
         <input {...getInputProps()} />
         <p className="text-slate-500 dark:text-slate-400 text-sm">
-          Drag 'n' drop some files here, or click to select files{' '}
-          <br></br> (max {multiple ? maxFiles : 1} file{multiple && 's'})
+          Drag 'n' drop some files here, or click to select files <br></br> (max{" "}
+          {multiple ? maxFiles : 1} file{multiple && "s"})
         </p>
       </div>
 
