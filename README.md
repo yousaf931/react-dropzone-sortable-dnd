@@ -2,6 +2,20 @@
 
 DropZone is a flexible and customizable React component for file uploading with sortable drag-and-drop functionality. It supports image compression, custom thumbnail rendering. Perfect for building modern file upload experiences based on tailwindcss styling.
 
+## Installation
+
+To use the DropZone component, you need to install the `dropzone-react-sortable-dnd` package. You can do this via npm:
+
+```bash
+npm install dropzone-react-sortable-dnd
+
+```
+or
+```bash
+yarn add dropzone-react-sortable-dnd
+
+```
+
 ## Features
 
 - **Drag-and-Drop**: Easily drag and drop files to upload.
